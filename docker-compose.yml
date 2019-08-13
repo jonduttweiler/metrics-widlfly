@@ -1,0 +1,48 @@
+version: '3'
+services: 
+  grafana:
+   container_name: metrics-grafana
+   image: grafana/grafana
+   stdin_open: true
+   tty: true
+   restart: always
+   environment:
+    - GF_SECURITY_ADMIN_PASSWORD=metrics
+   volumes:
+    - grafana:/var/lib/grafana 
+   networks:
+    - metrics
+   ports:
+    - '3000:3000'
+
+  wildfly:
+   container_name: metrics-wildfly
+   build: ./wildfly
+   stdin_open: true
+   tty: true
+   restart: always
+   networks:
+    - metrics
+   ports:
+    - '9990:9990'
+    - '8080:8080'  
+
+  prometheus:
+   container_name: metrics-prometheus
+   image: prom/prometheus
+   stdin_open: true
+   tty: true
+   restart: always
+   networks:
+    - metrics
+   ports:
+    - '9090:9090'
+   volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+networks:
+ metrics:
+  driver: 'bridge'
+
+volumes:
+  grafana:
