@@ -18,6 +18,7 @@ services:
   wildfly:
    container_name: metrics-wildfly
    build: ./wildfly
+   image: jduttweiler/wildfly:lab
    stdin_open: true
    tty: true
    restart: always
