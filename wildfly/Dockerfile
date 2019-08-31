@@ -1,7 +1,11 @@
-FROM jboss/wildfly:15.0.1.Final
+FROM jboss/wildfly:17.0.1.Final
+LABEL maintainer="Jonatan E. Duttweiler <jduttweiler@santafe.gob.ar>"
+
 RUN /opt/jboss/wildfly/bin/add-user.sh admin admin --silent
 
-#Copiar el management.properties y listo, a eso lo ponemos en el gitignore y dejamos la linea anterior comentada
+COPY ./configuration/standalone.xml /opt/jboss/wildfly/standalone/configuration
 
+#Deploy example app
+COPY ./test-app.war /opt/jboss/wildfly/standalone/deployments
 
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
